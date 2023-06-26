@@ -1,0 +1,31 @@
+package fdmgroup;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class MarketLogReader {
+	
+	public static List<Trade> readMarketData(File filePath) throws IOException {
+		
+		List<Trade> trades = new ArrayList<Trade>();
+		
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(";");
+                String dateTime = parts[0];
+                String ticker = parts[1];
+                double price = Double.parseDouble(parts[2].replace(',', '.'));
+                int quantity = Integer.parseInt(parts[3]);
+                Trade trade = new Trade(dateTime, ticker, price, quantity);
+                trades.add(trade);
+                System.out.println(trade.toString());
+            }
+        }
+		return trades;
+	}
+}

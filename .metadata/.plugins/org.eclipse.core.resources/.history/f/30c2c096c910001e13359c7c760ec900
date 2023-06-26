@@ -1,0 +1,7 @@
+package fdmgroup;
+
+public class DailyAggregate {
+	
+	private String date
+
+}

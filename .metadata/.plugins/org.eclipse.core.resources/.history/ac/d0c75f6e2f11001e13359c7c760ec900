@@ -1,0 +1,58 @@
+package fdmgroup;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+public class Result {
+	
+	public static void printToConsole(Map<LocalDate, Map<String, DailyAggregate>> dailyAggregates, Map<LocalDate, Index> dailyIndexes) {
+		
+		String[] tickerNames = {"ABC", "MEGA", "NGL", "TRX"};
+		
+		for (Map.Entry<LocalDate, Map<String, DailyAggregate>> entry : dailyAggregates.entrySet()) {
+			LocalDate date = entry.getKey();
+			Map<String, DailyAggregate> aggregatesByTicker = entry.getValue();
+			
+			List<String> tickers = new ArrayList<>(Arrays.asList(tickerNames));
+
+			System.out.println("Date: " + date);
+			for (DailyAggregate aggregate : aggregatesByTicker.values()) {
+				System.out.println("Ticker: " + aggregate.getTicker());
+				System.out.println("Open Price: " + aggregate.getOpenPrice());
+				System.out.println("Close Price: " + aggregate.getClosePrice());
+				System.out.println("Highest Price: " + aggregate.getHighestPrice());
+				System.out.println("Lowest Price: " + aggregate.getLowestPrice());
+				System.out.println("Daily Volume: " + aggregate.getDailyVolume());
+				System.out.println();
+				
+				if (tickers.contains(aggregate.getTicker())) {
+					tickers.remove(aggregate.getTicker());
+				}
+			}
+			
+			if (!tickers.isEmpty()) {
+				for (String ticker : tickers) {
+					System.out.println("Ticker: " + ticker);
+					System.out.println("Open Price: N/A");
+					System.out.println("Close Price: N/A");
+					System.out.println("Highest Price: N/A");
+					System.out.println("Lowest Price: N/A");
+					System.out.println("Daily Volume: N/A");
+					System.out.println();
+				}
+			}
+			
+			Index index = dailyIndexes.get(date);
+			System.out.println("Ticker: " + index.getTicker());
+			System.out.println("Open Price: " + index.getOpenPrice());
+			System.out.println("Close Price: " + index.getClosePrice());
+			System.out.println("Highest Price: " + index.getHighestPrice());
+			System.out.println("Lowest Price: " + index.getLowestPrice());
+			System.out.println();
+			System.out.println();
+		}
+	}
+}

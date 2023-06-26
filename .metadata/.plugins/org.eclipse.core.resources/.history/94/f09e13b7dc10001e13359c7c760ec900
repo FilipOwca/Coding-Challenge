@@ -1,0 +1,25 @@
+package fdmgroup;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+public class Runner {
+
+	public static void main(String[] args) {
+		
+		File data = new File("D:\\Users\\Filip\\Desktop\\Coding-Task\\test-market.csv");
+		
+        try {
+            List<Trade> trades = MarketLogReader.readMarketData(data);
+            
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+		
+
+	}
+	
+
+}

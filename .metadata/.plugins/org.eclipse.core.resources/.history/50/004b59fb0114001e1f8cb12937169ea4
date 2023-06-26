@@ -1,0 +1,14 @@
+package fdmgroup;
+
+import java.io.File;
+
+import org.junit.jupiter.api.Test;
+
+class MarketLogReaderTests {
+
+	@Test
+	void test_ReadMarketDataReads_CSV_FilesProperly() {
+		File file = new File("D:\\Users\\Filip\\Desktop\\Coding-Task\\testing-file.csv");
+	}
+
+}

@@ -1,0 +1,87 @@
+package fdmgroup;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * The Result class is responsible for providing input to the user
+ * @author Filip
+ *
+ */
+public class Result {
+
+	/**
+	 * Prints the daily aggregates and indexes to the console.
+	 *
+	 * @param dailyAggregates A map of daily aggregates grouped by date and ticker symbol
+	 * @param dailyIndexes A map of daily indexes grouped by date
+	 */
+	public static void printToConsole(Map<LocalDate, Map<String, DailyAggregate>> dailyAggregates,
+			Map<LocalDate, Index> dailyIndexes) {
+
+		String[] tickerNames = { "ABC", "MEGA", "NGL", "TRX" };
+
+		for (Map.Entry<LocalDate, Map<String, DailyAggregate>> entry : dailyAggregates.entrySet()) {
+			LocalDate date = entry.getKey();
+			Map<String, DailyAggregate> aggregatesByTicker = entry.getValue();
+
+			List<String> emptyTickers = new ArrayList<>(Arrays.asList(tickerNames));
+
+			System.out.println("Date: " + date);
+			for (DailyAggregate aggregate : aggregatesByTicker.values()) {
+				printDailyAggregate(aggregate);
+
+				if (emptyTickers.contains(aggregate.getTicker())) {
+					emptyTickers.remove(aggregate.getTicker());
+				}
+			}
+
+			if (!emptyTickers.isEmpty()) {
+				for (String ticker : emptyTickers) {
+					printEmptyAggregate(ticker);
+				}
+			}
+
+			Index index = dailyIndexes.get(date);
+			printDailyIndex(index);
+		}
+	}
+
+	private static void printDailyAggregate(DailyAggregate aggregate) {
+
+		System.out.println("Ticker: " + aggregate.getTicker());
+		System.out.println("Open Price: " + aggregate.getOpenPrice());
+		System.out.println("Close Price: " + aggregate.getClosePrice());
+		System.out.println("Highest Price: " + aggregate.getHighestPrice());
+		System.out.println("Lowest Price: " + aggregate.getLowestPrice());
+		System.out.println("Daily Volume: " + aggregate.getDailyVolume());
+		System.out.println();
+
+	}
+
+	private static void printEmptyAggregate(String ticker) {
+
+		System.out.println("Ticker: " + ticker);
+		System.out.println("Open Price: N/A");
+		System.out.println("Close Price: N/A");
+		System.out.println("Highest Price: N/A");
+		System.out.println("Lowest Price: N/A");
+		System.out.println("Daily Volume: N/A");
+		System.out.println();
+
+	}
+
+	private static void printDailyIndex(Index index) {
+
+		System.out.println("Ticker: " + index.getTicker());
+		System.out.println("Open Price: " + index.getOpenPrice());
+		System.out.println("Close Price: " + index.getClosePrice());
+		System.out.println("Highest Price: " + index.getHighestPrice());
+		System.out.println("Lowest Price: " + index.getLowestPrice());
+		System.out.println();
+		System.out.println();
+	}
+}

@@ -1,0 +1,76 @@
+package fdmgroup;
+
+public class Index {
+
+	private final double ABC = 0.1;
+	private final double MEGA = 0.3;
+	private final double NGL = 0.4;
+	private final double TRX = 0.2;
+
+	private double lastABCPrice;
+	private double lastMEGAPrice;
+	private double lastNGLPrice;
+	private double lastTRXPrice;
+
+	private double openPrice;
+	private double closePrice;
+	private double highestPrice;
+	private double lowestPrice;
+
+	private String ticker;
+
+	public Index(String ticker) {
+		super();
+		this.ticker = ticker;
+	}
+
+	public void update(String ticker, double price) {
+
+		if (ticker.equals("ABC")) {
+			this.lastABCPrice = price;
+		} else if (ticker.equals("MEGA")) {
+			this.lastMEGAPrice = price;
+		} else if (ticker.equals("NGL")) {
+			this.lastNGLPrice = price;
+		} else {
+			this.lastTRXPrice = price;
+		}
+
+		double currentPrice = ABC * lastABCPrice + MEGA * lastMEGAPrice + NGL * lastNGLPrice + TRX * lastTRXPrice;
+
+		if (this.openPrice == 0) {
+			this.openPrice = currentPrice;
+		}
+
+		this.closePrice = currentPrice;
+
+		if (this.highestPrice == 0 || this.highestPrice < currentPrice) {
+			this.highestPrice = currentPrice;
+		}
+
+		if (this.lowestPrice == 0 || this.lowestPrice > currentPrice) {
+			this.lowestPrice = currentPrice;
+		}
+	}
+
+	public double getOpenPrice() {
+		return openPrice;
+	}
+
+	public double getClosePrice() {
+		return closePrice;
+	}
+
+	public double getHighestPrice() {
+		return highestPrice;
+	}
+
+	public double getLowestPrice() {
+		return lowestPrice;
+	}
+
+	public String getTicker() {
+		return ticker;
+	}
+
+}

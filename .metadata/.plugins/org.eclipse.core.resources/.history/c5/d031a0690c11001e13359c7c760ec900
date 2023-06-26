@@ -1,0 +1,64 @@
+package fdmgroup;
+
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class DailyAggregateCalculator {
+
+	public static Map<LocalDate, Map<String, DailyAggregate>> calculateDailyAggregates(List<Trade> trades) {
+
+		Map<LocalDate, Map<String, DailyAggregate>> dailyAggregates = new HashMap<>();
+
+		for (Trade trade : trades) {
+			LocalDate date = trade.getDate();
+			String ticker = trade.getTicker();
+
+			Map<String, DailyAggregate> aggregatesByTicker = dailyAggregates.get(date);
+			if (aggregatesByTicker == null) {
+				aggregatesByTicker = new HashMap<>();
+				dailyAggregates.put(date, aggregatesByTicker);
+			}
+
+			DailyAggregate aggregate = aggregatesByTicker.get(ticker);
+			if (aggregate == null) {
+				aggregate = new DailyAggregate(ticker);
+				aggregatesByTicker.put(ticker, aggregate);
+			}
+
+			if (aggregate.getOpenPrice() == 0) {
+				aggregate.setOpenPrice(trade.getPrice());
+			}
+
+			aggregate.setClosePrice(trade.getPrice());
+
+			if (aggregate.getHighestPrice() == 0 || trade.getPrice() > aggregate.getHighestPrice()) {
+				aggregate.setHighestPrice(trade.getPrice());
+			}
+
+			if (aggregate.getLowestPrice() == 0 || trade.getPrice() < aggregate.getLowestPrice()) {
+				aggregate.setLowestPrice(trade.getPrice());
+			}
+
+			aggregate.setDailyVolume(aggregate.getDailyVolume() + (trade.getPrice() * trade.getTradeQuantity()));
+
+		}
+		
+        // Iterate over dailyAggregates to check for tickers with no trades
+        for (Map<String, DailyAggregate> aggregatesByTicker : dailyAggregates.values()) {
+            for (DailyAggregate aggregate : aggregatesByTicker.values()) {
+                if (aggregate.getDailyVolume() == 0) {
+                    // Set the values in the DailyAggregate object to "N/A"
+                    aggregate.setOpenPrice(0);
+                    aggregate.setClosePrice(0);
+                    aggregate.setHighestPrice(0);
+                    aggregate.setLowestPrice(0);
+                }
+            }
+        }
+
+		return dailyAggregates;
+	}
+
+}

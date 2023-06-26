@@ -1,0 +1,60 @@
+package fdmgroup;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+public class Trade {
+
+	private LocalDate dateTime;
+	private String ticker;
+	private double price;
+	private int tradeQuantity;
+
+	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+	public Trade(String date, String ticker, double price, int tradeQuantity) {
+		this.dateTime = LocalDate.parse(date, FORMATTER);
+		this.ticker = ticker;
+		this.price = price;
+		this.tradeQuantity = tradeQuantity;
+	}
+
+	public LocalDate getDataTime() {
+		return dateTime;
+	}
+
+	public void setDataTime(LocalDate dateTime) {
+		this.dateTime = dateTime;
+	}
+
+	public String getTicker() {
+		return ticker;
+	}
+
+	public void setTicker(String ticker) {
+		this.ticker = ticker;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public int getTradeQuantity() {
+		return tradeQuantity;
+	}
+
+	public void setTradeQuantity(int tradeQuantity) {
+		this.tradeQuantity = tradeQuantity;
+	}
+
+	@Override
+	public String toString() {
+		return "Trade [dateTime=" + dateTime + ", ticker=" + ticker + ", price=" + price + ", tradeQuantity="
+				+ tradeQuantity + "]";
+	}
+
+}

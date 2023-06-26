@@ -1,0 +1,40 @@
+package fdmgroup;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class Runner {
+
+	public static void main(String[] args) {
+		
+		File data = new File("D:\\Users\\Filip\\Desktop\\Coding-Task\\test-market.csv");
+		
+		try {
+			int count = readData(data);
+			System.out.println("count: " + count);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	public static int readData(File file) throws IOException {
+		
+		
+		BufferedReader reader = new BufferedReader(new FileReader(file));
+		
+		String line = "";
+		String separator = ";";
+		int count = 0;
+		
+		while((line = reader.readLine()) != null) {
+			count++;
+			String[] trade = line.split(separator);
+			System.out.println("Trade [dataTime = " + trade[0] + ", ticker = " + trade[1] + ", price = " + trade[2] + ", tradeQuantity = " + trade[3] + "]");
+		}
+		return count;
+	}
+
+}

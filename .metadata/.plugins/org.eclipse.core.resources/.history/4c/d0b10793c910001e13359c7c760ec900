@@ -1,0 +1,49 @@
+package fdmgroup;
+
+public class Trade {
+
+	private String dateTime;
+	private String ticker;
+	private double price;
+	private int tradeQuantity;
+
+	public Trade(String dateTime, String ticker, double price, int tradeQuantity) {
+		this.dateTime = dateTime;
+		this.ticker = ticker;
+		this.price = price;
+		this.tradeQuantity = tradeQuantity;
+	}
+
+	public String getDataTime() {
+		return dateTime;
+	}
+
+	public void setDataTime(String dataTime) {
+		this.dateTime = dataTime;
+	}
+
+	public String getTicker() {
+		return ticker;
+	}
+
+	public void setTicker(String ticker) {
+		this.ticker = ticker;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public int getTradeQuantity() {
+		return tradeQuantity;
+	}
+
+	public void setTradeQuantity(int tradeQuantity) {
+		this.tradeQuantity = tradeQuantity;
+	}
+
+}

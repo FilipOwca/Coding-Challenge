@@ -1,0 +1,43 @@
+package fdmgroup;
+
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+
+public class Runner {
+
+	public static void main(String[] args) {
+		
+		File data = new File("D:\\Users\\Filip\\Desktop\\Coding-Task\\test-market.csv");
+		
+        try {
+            List<Trade> trades = MarketLogReader.readMarketData(data);
+            
+
+
+		
+        Map<LocalDate, Map<String, DailyAggregate>> dailyAggregates = DailyAggregateCalculator.calculateDailyAggregates(trades);
+        
+        // Print daily aggregates
+        for (Map.Entry<LocalDate, Map<String, DailyAggregate>> entry : dailyAggregates.entrySet()) {
+            LocalDate date = entry.getKey();
+            Map<String, DailyAggregate> aggregatesByTicker = entry.getValue();
+
+            System.out.println("Date: " + date);
+            for (DailyAggregate aggregate : aggregatesByTicker.values()) {
+                // Print the daily aggregates for each ticker
+            }
+            System.out.println();
+        }
+        
+        
+        
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+	}
+	
+
+}

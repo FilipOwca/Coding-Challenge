@@ -1,0 +1,7 @@
+1687350213483	Rename method 'scanData'
+1687416807305	Rename field 'dataTime'
+1687416834441	Rename local variable 'dataTime'
+1687420432414	Rename field 'formatter'
+1687421583755	Rename field 'dateTime'
+1687504666351	Rename local variable 'tickers'
+1687505894045	Rename local variable 'filePath'
