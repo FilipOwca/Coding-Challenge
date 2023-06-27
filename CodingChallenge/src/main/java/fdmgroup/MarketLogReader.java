@@ -8,36 +8,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The MarketLogReader class is responsible for reading market data from a file 
+ * The MarketLogReader class is responsible for reading market data from a file
  * and creating a list of Trade objects representing the trades.
+ * 
  * @author Filip
  *
  */
 public class MarketLogReader {
 
 	/**
-	 * Reads market data from the specified file and returns a list of Trade objects.
+	 * Reads market data from the specified file and returns a list of Trade
+	 * objects.
 	 *
 	 * @param The file to read market data from
 	 * @return A list of Trade objects representing the trades in the market data
 	 * @throws IOException if an I/O error occurs while reading the file
 	 */
-	public static List<Trade> readMarketData(File file) throws IOException {
+	public static List<Trade> readMarketData(File file) throws RuntimeException {
 
 		List<Trade> trades = new ArrayList<Trade>();
 
 		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 			String line;
 			while ((line = reader.readLine()) != null) {
-				String[] parts = line.split(";");
-				String dateTime = parts[0];
-				String ticker = parts[1];
-				double price = Double.parseDouble(parts[2].replace(',', '.'));
-				int quantity = Integer.parseInt(parts[3]);
-				Trade trade = new Trade(dateTime, ticker, price, quantity);
+				Trade trade = saveLineAsTrade(line);
 				trades.add(trade);
 			}
+		} catch (IOException e) {
+			throw new RuntimeException("Missing data file", e);
 		}
+
 		return trades;
 	}
+
+	private static Trade saveLineAsTrade(String line) {
+		String[] parts = line.split(";");
+		String dateTime = parts[0];
+		String ticker = parts[1];
+		double price = Double.parseDouble(parts[2].replace(',', '.'));
+		int quantity = Integer.parseInt(parts[3]);
+		return new Trade(dateTime, ticker, price, quantity);
+	}
+
 }

@@ -16,9 +16,9 @@ class MarketLogReaderTests {
 
 	@Test
 	void test_ReadMarketDataReads_CSV_FilesProperly() throws IOException {
-		File file = new File("D:\\Users\\Filip\\Desktop\\Coding-Task\\testing-file.csv");
+		File file = new File("src/test/resources/testing-file.csv");
 		
-		List<Trade> trades = MarketLogReader.readMarketData(file);
+		List<Trade> trades = MarketLogReader.readMarketData(file); 
 		
 		assertNotNull(trades);
 		assertEquals(3, trades.size());
@@ -44,9 +44,9 @@ class MarketLogReaderTests {
 	
 	@Test 
 	void test_ReadMarketData_Throws_IOException(){
-		File nonExistingFile = new File("D:\\Users\\Filip\\Desktop\\Coding-Task\\non-existing-file.csv");
+		File nonExistingFile = new File("src/main/resources/non-existing-file.csv");
 		
-		assertThrows(IOException.class, () -> MarketLogReader.readMarketData(nonExistingFile));
+		assertThrows(RuntimeException.class, () -> MarketLogReader.readMarketData(nonExistingFile));
 	}
 
 }

@@ -1,0 +1,75 @@
+package fdmgroup;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+/**
+ * The Trade class represents a single trade in the market.
+ * @author Filip
+ *
+ */
+// I financial operation interface
+public class Trade implements IFinancialOperation {
+
+	private LocalDate date;
+	private String ticker;
+	private double price;
+	private int tradeQuantity;
+
+	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+	/**
+	 * Constructs a Trade object with the specified trade details.
+	 *
+	 * @param date           The date and time of the trade in the string format. 
+	 * Then being parsed to LocalDate in "yyyy-MM-dd HH:mm:ss" format.
+	 * @param ticker         The ticker symbol of the traded instrument
+	 * @param price          The price at which the trade occurred
+	 * @param tradeQuantity  The quantity of the traded instrument
+	 */
+	public Trade(String date, String ticker, double price, int tradeQuantity) { 
+		this.date = LocalDate.parse(date, FORMATTER);
+		this.ticker = ticker;
+		this.price = price;
+		this.tradeQuantity = tradeQuantity;
+	}
+
+	public LocalDate getDate() {
+		return date;
+	}
+
+	public void setDate(LocalDate dateTime) {
+		this.date = dateTime;
+	}
+
+	public String getTicker() {
+		return ticker;
+	}
+
+	public void setTicker(String ticker) {
+		this.ticker = ticker;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public int getTradeQuantity() {
+		return tradeQuantity;
+	}
+
+	public void setTradeQuantity(int tradeQuantity) {
+		this.tradeQuantity = tradeQuantity;
+	}
+
+	@Override
+	public String toString() {
+		return "Trade [dateTime=" + date + ", ticker=" + ticker + ", price=" + price + ", tradeQuantity="
+				+ tradeQuantity + "]";
+	}
+
+}

@@ -1,0 +1,105 @@
+package fdmgroup;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.jupiter.api.Test;
+
+class DailyAggregateCalculatorTests {
+
+	@Test
+	void test_calculateDailyAggregates_providesExpectedOutput() {
+//		Create a list of trades for testing
+		List<Trade> trades = new ArrayList<>();
+		trades.add(new Trade("2023-01-01 10:10:00", "ABC", 10.0, 100));
+		trades.add(new Trade("2023-01-01 10:20:00", "ABC", 15.0, 150));
+		trades.add(new Trade("2023-01-01 11:00:00", "DEF", 20.0, 200));
+		trades.add(new Trade("2023-01-01 11:10:00", "DEF", 25.0, 250));
+		trades.add(new Trade("2023-01-02 10:30:00", "ABC", 30.0, 300));
+		
+//		Calculate daily aggregates
+		Map<LocalDate, Map<String, DailyAggregate>> dailyAggregates = DailyAggregateCalculator.calculateDailyAggregates(trades);
+		
+//		Create the expected result
+		Map<LocalDate, Map<String, DailyAggregate>> expectedAggregates = new HashMap<>();
+		
+		Map<String, DailyAggregate> aggregatesDay1 = new HashMap<>();
+		DailyAggregate dailyABC1 = new DailyAggregate("ABC");
+		dailyABC1.setOpenPrice(10.0);
+		dailyABC1.setClosePrice(15.0);
+		dailyABC1.setHighestPrice(15.0);
+		dailyABC1.setLowestPrice(10.0);
+		dailyABC1.setDailyVolume(3250.0);
+		aggregatesDay1.put(dailyABC1.getTicker(), dailyABC1);
+		
+		DailyAggregate dailyDEF1 = new DailyAggregate("DEF");
+		dailyDEF1.setOpenPrice(20.0);
+		dailyDEF1.setClosePrice(25.0);
+		dailyDEF1.setHighestPrice(25.0);
+		dailyDEF1.setLowestPrice(20.0);
+		dailyDEF1.setDailyVolume(10250.0);
+		aggregatesDay1.put(dailyDEF1.getTicker(), dailyDEF1);
+		
+		expectedAggregates.put(LocalDate.of(2023, 1, 1), aggregatesDay1);
+		
+		Map<String, DailyAggregate> aggregatesDay2 = new HashMap<>();
+		DailyAggregate dailyABC2 = new DailyAggregate("ABC");
+		dailyABC2.setOpenPrice(30.0);
+		dailyABC2.setClosePrice(30.0);
+		dailyABC2.setHighestPrice(30.0);
+		dailyABC2.setLowestPrice(30.0);
+		dailyABC2.setDailyVolume(9000.0);
+		aggregatesDay2.put(dailyABC2.getTicker(), dailyABC2);
+		
+		expectedAggregates.put(LocalDate.of(2023, 1, 2), aggregatesDay2);
+		
+//		Compare the actual and expected results
+        assertEquals(expectedAggregates.size(), dailyAggregates.size());
+        for (LocalDate date : expectedAggregates.keySet()) {
+            assertTrue(dailyAggregates.containsKey(date));
+            assertEquals(expectedAggregates.get(date).size(), dailyAggregates.get(date).size());
+            for (String ticker : expectedAggregates.get(date).keySet()) {
+                assertTrue(dailyAggregates.get(date).containsKey(ticker));
+                DailyAggregate expectedAggregate = expectedAggregates.get(date).get(ticker);
+                DailyAggregate actualAggregate = dailyAggregates.get(date).get(ticker);
+                assertEquals(expectedAggregate.toString(), actualAggregate.toString());
+            }
+        }
+	}
+	
+	@Test
+	void test_CaclulateDailyIndexes_providesExpectedOutput() {
+//		Create a list of trades for testing
+		List<Trade> trades = new ArrayList<>();
+		trades.add(new Trade("2023-01-01 10:10:00", "ABC", 10.0, 100));
+		trades.add(new Trade("2023-01-01 10:20:00", "ABC", 15.0, 150));
+		trades.add(new Trade("2023-01-01 11:00:00", "MEGA", 20.0, 200));
+		trades.add(new Trade("2023-01-01 11:10:00", "MEGA", 25.0, 250));
+		
+//		Calculate daily Indexes
+		Map<LocalDate, Index> dailyIndexes = DailyAggregateCalculator.calculateDailyIndexes(trades);
+		
+//		Create the expected result
+		Map<LocalDate, Index> expectedIndexes = new HashMap<>();
+		
+		Index index = new Index("INDEX");
+		index.update("ABC", 10);
+		index.update("ABC", 15);
+		index.update("MEGA", 20);
+		index.update("MEGA", 25);
+		
+		expectedIndexes.put(LocalDate.of(2023, 1, 1), index);
+		
+//		Compare the actual and expected results
+		assertEquals(expectedIndexes.size(), dailyIndexes.size());
+		
+		
+	}
+
+}

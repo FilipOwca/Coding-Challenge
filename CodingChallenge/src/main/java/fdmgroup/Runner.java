@@ -24,23 +24,27 @@ public class Runner {
 	public static void main(String[] args) {
 
 	    // Path to the market data file
-		File data = new File("D:\\Users\\Filip\\Desktop\\Coding-Task\\test-market.csv");
+		File data = new File("src/main/resources/test-market.csv");
+		
+		String[] tickerNames = { "ABC", "MEGA", "NGL", "TRX" };
 
 		try {
 			// Read the market data from the file
 			List<Trade> trades = MarketLogReader.readMarketData(data);
 
 			// Calculate daily aggregates
-			Map<LocalDate, Map<String, DailyAggregate>> dailyAggregates = DailyAggregateCalculator
-					.calculateDailyAggregates(trades);
+			DailyAggregateCalculator calculator = new DailyAggregateCalculator();
+			calculator.calculate(trades);
+			Map<LocalDate, Map<String, DailyAggregate>> dailyAggregates = calculator.getDailyAggregates();
 
 			// Calculate daily indexes
-			Map<LocalDate, Index> dailyIndexes = DailyAggregateCalculator.calculateDailyIndexes(trades);
+			Map<LocalDate, Index> dailyIndexes = calculator.getDailyIndexes();
 
 			// Print the results to the console
-			Result.printToConsole(dailyAggregates, dailyIndexes);
+			Result result = new Result(tickerNames);
+			result.printToConsole(dailyAggregates, dailyIndexes);
 
-		} catch (IOException e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 		}
 	}

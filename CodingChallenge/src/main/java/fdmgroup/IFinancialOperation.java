@@ -1,0 +1,6 @@
+package fdmgroup;
+
+public interface IFinancialOperation {
+	
+
+}

@@ -9,98 +9,111 @@ import java.util.Map;
  * The DailyAggregateCalculator class is responsible for calculating daily
  * aggregates and indexes based on a list of trades.
  * 
+ * This class maintains a map of daily aggregates and a map of daily indexes.
+ * The daily aggregates map stores daily aggregates for each date and ticker
+ * symbol, while the daily indexes map stores index values for each date.
+ * 
  * @author Filip
  *
  */
 public class DailyAggregateCalculator {
 
+	private Map<LocalDate, Map<String, DailyAggregate>> dailyAggregates = new HashMap<>();
+	private Map<LocalDate, Index> dailyIndexes = new HashMap<>();
+
 	/**
-	 * Calculates daily aggregates for each trading day and company ticker based on
-	 * the provided list of trades.
-	 *
-	 * @param trades The list of trades to calculate daily aggregates from
-	 * @return A map of daily aggregates maps grouped by date. The daily aggregate
-	 *         map consists of daily aggregates grouped by ticker
+	 * Calculates the daily aggregates and indexes based on a list of trades.
+	 * 
+	 * @param trades the list of trades
 	 */
-	public static Map<LocalDate, Map<String, DailyAggregate>> calculateDailyAggregates(List<Trade> trades) {
-
-		Map<LocalDate, Map<String, DailyAggregate>> dailyAggregates = new HashMap<>();
-
+	public void calculate(List<Trade> trades) {
 		for (Trade trade : trades) {
-
-			LocalDate date = trade.getDate();
-			String ticker = trade.getTicker();
-
-//			Get the map of daily aggregates for the respective day. Create a new one if doesn't exist.
-			Map<String, DailyAggregate> aggregatesByTicker = dailyAggregates.get(date);
-			if (aggregatesByTicker == null) {
-				aggregatesByTicker = new HashMap<>();
-				dailyAggregates.put(date, aggregatesByTicker);
-			}
-
-//			Get the daily aggregate for a respective ticker. Create a new one of doesn't exist.
-			DailyAggregate aggregate = aggregatesByTicker.get(ticker);
-			if (aggregate == null) {
-				aggregate = new DailyAggregate(ticker);
-				aggregatesByTicker.put(ticker, aggregate);
-			}
-
-//			Update open price
-			if (aggregate.getOpenPrice() == 0) {
-				aggregate.setOpenPrice(trade.getPrice());
-			}
-
-//			Update close price
-			aggregate.setClosePrice(trade.getPrice());
-
-//			Update highest price
-			if (aggregate.getHighestPrice() == 0 || trade.getPrice() > aggregate.getHighestPrice()) {
-				aggregate.setHighestPrice(trade.getPrice());
-			}
-
-//			Update lowest price
-			if (aggregate.getLowestPrice() == 0 || trade.getPrice() < aggregate.getLowestPrice()) {
-				aggregate.setLowestPrice(trade.getPrice());
-			}
-
-//			Update daily volume
-			aggregate.setDailyVolume(aggregate.getDailyVolume() + (trade.getPrice() * trade.getTradeQuantity()));
-
+			calculateDailyAggregates(trade);
+			calculateDailyIndexes(trade);
 		}
-
-		return dailyAggregates;
 	}
 
 	/**
-	 * Calculates daily indexes based on the provided list of trades.
-	 *
-	 * @param trades The list of trades to calculate daily indexes from
-	 * @return A map of daily indexes grouped by date
+	 * Calculates the daily aggregates for a given trade.
+	 * 
+	 * @param trade the trade
 	 */
-	public static Map<LocalDate, Index> calculateDailyIndexes(List<Trade> trades) {
+	private void calculateDailyAggregates(Trade trade) {
 
-		Map<LocalDate, Index> dailyIndexes = new HashMap<>();
+		LocalDate date = trade.getDate();
+		String ticker = trade.getTicker();
 
-		for (Trade trade : trades) {
-
-			LocalDate date = trade.getDate();
-			String ticker = trade.getTicker();
-			double price = trade.getPrice();
-
-//			Get the index object for a respective day. Create one if doesn't exist.
-			Index currentIndex = dailyIndexes.get(date);
-			if (currentIndex == null) {
-				currentIndex = new Index("INDEX");
-				dailyIndexes.put(date, currentIndex);
-			}
-
-//			Update index values.
-			currentIndex.update(ticker, price);
-
+//		Get the map of daily aggregates for the respective day. Create a new one if doesn't exist.
+		Map<String, DailyAggregate> aggregatesByTicker = dailyAggregates.get(date);
+		if (aggregatesByTicker == null) {
+			aggregatesByTicker = new HashMap<>();
+			dailyAggregates.put(date, aggregatesByTicker);
 		}
 
-		return dailyIndexes;
+//		Get the daily aggregate for a respective ticker. Create a new one if doesn't exist.
+		DailyAggregate aggregate = aggregatesByTicker.get(ticker);
+		if (aggregate == null) {
+			aggregate = new DailyAggregate(ticker);
+			aggregatesByTicker.put(ticker, aggregate);
+		}
 
+		updateDailyAggregatePrices(aggregate, trade);
+
+	}
+
+	/**
+	 * Updates the prices in the daily aggregate based on a trade.
+	 * 
+	 * @param aggregate the daily aggregate
+	 * @param trade     the trade
+	 */
+	private void updateDailyAggregatePrices(DailyAggregate aggregate, Trade trade) {
+
+		if (aggregate.getOpenPrice() == 0) {
+			aggregate.setOpenPrice(trade.getPrice());
+		}
+
+		aggregate.setClosePrice(trade.getPrice());
+
+		if (aggregate.getHighestPrice() == 0 || trade.getPrice() > aggregate.getHighestPrice()) {
+			aggregate.setHighestPrice(trade.getPrice());
+		}
+
+		if (aggregate.getLowestPrice() == 0 || trade.getPrice() < aggregate.getLowestPrice()) {
+			aggregate.setLowestPrice(trade.getPrice());
+		}
+
+		aggregate.setDailyVolume(aggregate.getDailyVolume() + (trade.getPrice() * trade.getTradeQuantity()));
+	}
+
+	/**
+	 * Calculates the daily indexes for a given trade.
+	 * 
+	 * @param trade the trade
+	 */
+	private void calculateDailyIndexes(Trade trade) {
+
+		LocalDate date = trade.getDate();
+		String ticker = trade.getTicker();
+		double price = trade.getPrice();
+
+//		Get the index object for a respective day. Create one if doesn't exist.
+		Index currentIndex = dailyIndexes.get(date);
+		if (currentIndex == null) {
+			currentIndex = new Index("INDEX");
+			dailyIndexes.put(date, currentIndex);
+		}
+//		Update index values.
+		currentIndex.update(ticker, price);
+
+	}
+
+	public Map<LocalDate, Map<String, DailyAggregate>> getDailyAggregates() {
+		return dailyAggregates;
+	}
+
+	public Map<LocalDate, Index> getDailyIndexes() {
+		return dailyIndexes;
 	}
 
 }

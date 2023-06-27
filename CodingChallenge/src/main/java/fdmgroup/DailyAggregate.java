@@ -1,7 +1,9 @@
 package fdmgroup;
 
 /**
- * The DailyAggregate class represents the aggregated information for a specific ticker on a daily basis.
+ * The DailyAggregate class represents the aggregated information for a specific
+ * ticker on a daily basis.
+ * 
  * @author Filip
  *
  */
@@ -20,7 +22,6 @@ public class DailyAggregate {
 	 * @param ticker The ticker symbol associated with the aggregated data
 	 */
 	public DailyAggregate(String ticker) {
-		super();
 		this.ticker = ticker;
 	}
 
@@ -70,6 +71,13 @@ public class DailyAggregate {
 
 	public void setDailyVolume(double dailyVolume) {
 		this.dailyVolume = dailyVolume;
+	}
+
+	@Override
+	public String toString() {
+		return "DailyAggregate [ticker=" + ticker + ", openPrice=" + openPrice + ", closePrice=" + closePrice
+				+ ", highestPrice=" + highestPrice + ", lowestPrice=" + lowestPrice + ", dailyVolume=" + dailyVolume
+				+ "]";
 	}
 
 }

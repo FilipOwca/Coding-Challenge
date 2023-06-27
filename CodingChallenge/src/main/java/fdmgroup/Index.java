@@ -1,12 +1,19 @@
 package fdmgroup;
 
 /**
- * The Index class represents an index price calculated based on the prices of different tickers.
- * It tracks the open price, close price, highest price, and lowest price of the index.
+ * The Index class represents an index price calculated based on the prices of
+ * different tickers. It tracks the open price, close price, highest price, and
+ * lowest price of the index.
+ * 
  * @author Filip
  *
  */
 public class Index {
+
+	private static final String ABC_NAME = "ABC";
+	private static final String MEGA_NAME = "MEGA";
+	private static final String NGL_NAME = "NGL";
+	private static final String TRX_NAME = "TRX";
 
 	private final double ABC = 0.1;
 	private final double MEGA = 0.3;
@@ -31,7 +38,6 @@ public class Index {
 	 * @param ticker The ticker symbol associated with the index
 	 */
 	public Index(String ticker) {
-		super();
 		this.ticker = ticker;
 	}
 
@@ -43,14 +49,19 @@ public class Index {
 	 */
 	public void update(String ticker, double price) {
 
-		if (ticker.equals("ABC")) {
+		switch (ticker) {
+		case ABC_NAME:
 			lastABCPrice = price;
-		} else if (ticker.equals("MEGA")) {
+			break;
+		case MEGA_NAME:
 			lastMEGAPrice = price;
-		} else if (ticker.equals("NGL")) {
+			break;
+		case NGL_NAME:
 			lastNGLPrice = price;
-		} else {
+			break;
+		case TRX_NAME:
 			lastTRXPrice = price;
+			break;
 		}
 
 //		Index calculation is possible only after all market prices are available on the first traded day
@@ -70,9 +81,7 @@ public class Index {
 			if (this.lowestPrice == 0 || this.lowestPrice > currentPrice) {
 				this.lowestPrice = currentPrice;
 			}
-
 		}
-
 	}
 
 	public double getOpenPrice() {
@@ -93,6 +102,12 @@ public class Index {
 
 	public String getTicker() {
 		return ticker;
+	}
+
+	@Override
+	public String toString() {
+		return "Index [openPrice=" + openPrice + ", closePrice=" + closePrice + ", highestPrice=" + highestPrice
+				+ ", lowestPrice=" + lowestPrice + ", ticker=" + ticker + "]";
 	}
 
 }

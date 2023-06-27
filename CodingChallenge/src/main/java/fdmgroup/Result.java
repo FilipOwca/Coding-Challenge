@@ -8,29 +8,34 @@ import java.util.Map;
 
 /**
  * The Result class is responsible for providing input to the user
+ * 
  * @author Filip
  *
  */
 public class Result {
 
+	private String[] tickerNames;
+
+	public Result(String[] tickerNames) {
+		this.tickerNames = tickerNames;
+	}
+
 	/**
 	 * Prints the daily aggregates and indexes to the console.
 	 *
-	 * @param dailyAggregates A map of daily aggregates grouped by date and ticker symbol
-	 * @param dailyIndexes A map of daily indexes grouped by date
+	 * @param dailyAggregates A map of daily aggregates grouped by date and ticker
+	 *                        symbol
+	 * @param dailyIndexes    A map of daily indexes grouped by date
 	 */
-	public static void printToConsole(Map<LocalDate, Map<String, DailyAggregate>> dailyAggregates,
+	public void printToConsole(Map<LocalDate, Map<String, DailyAggregate>> dailyAggregates,
 			Map<LocalDate, Index> dailyIndexes) {
-
-//		Keeps track if daily aggregates were printed for each ticker.
-		String[] tickerNames = { "ABC", "MEGA", "NGL", "TRX" };
 
 //		Iterate over the collection of aggregate maps and access market data for each day.
 		for (Map.Entry<LocalDate, Map<String, DailyAggregate>> entry : dailyAggregates.entrySet()) {
 			LocalDate date = entry.getKey();
 			Map<String, DailyAggregate> aggregatesByTicker = entry.getValue();
 
-//			Refresh the list of tickers with missing data every day.
+//			Refresh the control list of tickers data every day.
 			List<String> emptyTickers = new ArrayList<String>(Arrays.asList(tickerNames));
 
 			System.out.println("Date: " + date);
@@ -57,7 +62,7 @@ public class Result {
 	}
 
 	/**
-	 * Prints the information of a daily aggregate to the console.
+	 * Prints the information of a daily aggregate.
 	 *
 	 * @param aggregate The daily aggregate to print
 	 */
@@ -74,7 +79,7 @@ public class Result {
 	}
 
 	/**
-	 * Prints the information of an empty daily aggregate (no trades) to the console.
+	 * Prints the information of an empty daily aggregate (no trades).
 	 *
 	 * @param ticker The ticker symbol of the empty aggregate
 	 */
