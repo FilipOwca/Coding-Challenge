@@ -1,5 +1,7 @@
 # Coding-Challenge
 
+To run the program start the main method from Runner.java class.
+
 **Task Description:** Task is to calculate some daily aggregates for the provided market historical log (sample attached). Log is a list of all trades done in the market for a period of time, file format: date+time;company ticker;price;number of securities traded
 
 Market also publishes own index (please print as ticker INDEX), which is a weighted sum of ticker prices at an instant, please use the follow weights  to calculate INDEX: ABC: 0.1 MEGA: 0.3 NGL: 0.4 TRX: 0.2
