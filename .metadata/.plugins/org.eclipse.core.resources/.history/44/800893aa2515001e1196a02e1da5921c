@@ -1,0 +1,113 @@
+package fdmgroup;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * The Result class is responsible for providing input to the user
+ * 
+ * @author Filip
+ *
+ */
+public class Result {
+
+	private String[] tickerNames;
+
+	public Result(String[] tickerNames) {
+		this.tickerNames = tickerNames;
+	}
+
+	/**
+	 * Prints the daily aggregates and indexes to the console.
+	 *
+	 * @param dailyAggregates A map of daily aggregates grouped by date and ticker
+	 *                        symbol
+	 * @param dailyIndexes    A map of daily indexes grouped by date
+	 */
+	public void printToConsole(Map<LocalDate, Map<String, DailyAggregate>> dailyAggregates,
+			Map<LocalDate, Index> dailyIndexes) {
+
+//		Iterate over the collection of aggregate maps and access market data for each day.
+		for (Map.Entry<LocalDate, Map<String, DailyAggregate>> entry : dailyAggregates.entrySet()) {
+			LocalDate date = entry.getKey();
+			Map<String, DailyAggregate> aggregatesByTicker = entry.getValue();
+
+//			Refresh the control list of tickers data every day.
+			List<String> emptyTickers = new ArrayList<String>(Arrays.asList(tickerNames));
+
+			System.out.println("Date: " + date);
+			for (DailyAggregate aggregate : aggregatesByTicker.values()) {
+				printDailyAggregate(aggregate);
+
+//				After the data was printed for a ticker it's name is removed from the control list.
+				if (emptyTickers.contains(aggregate.getTicker())) {
+					emptyTickers.remove(aggregate.getTicker());
+				}
+			}
+
+//			Names which remain in the control list represent tickers without trades on a particular day.
+//			if (!emptyTickers.isEmpty()) {
+//				for (String ticker : emptyTickers) {
+//					printEmptyAggregate(ticker);
+//				}
+//			}
+
+//			Access and print Index values for each day.
+			Index index = dailyIndexes.get(date);
+			printDailyIndex(index);
+		}
+	}
+
+	/**
+	 * Prints the information of a daily aggregate.
+	 *
+	 * @param aggregate The daily aggregate to print
+	 */
+	private static void printDailyAggregate(DailyAggregate aggregate) {
+
+		System.out.println("Ticker: " + aggregate.getTicker());
+		System.out.println("Open Price: " + aggregate.getOpenPrice());
+		System.out.println("Close Price: " + aggregate.getClosePrice());
+		System.out.println("Highest Price: " + aggregate.getHighestPrice());
+		System.out.println("Lowest Price: " + aggregate.getLowestPrice());
+		System.out.println("Daily Volume: " + aggregate.getDailyVolume());
+		System.out.println();
+
+	}
+
+	/**
+	 * Prints the information of an empty daily aggregate (no trades).
+	 *
+	 * @param ticker The ticker symbol of the empty aggregate
+	 */
+	private static void printEmptyAggregate(String ticker) {
+
+		System.out.println("Ticker: " + ticker);
+		System.out.println("Open Price: N/A");
+		System.out.println("Close Price: N/A");
+		System.out.println("Highest Price: N/A");
+		System.out.println("Lowest Price: N/A");
+		System.out.println("Daily Volume: N/A");
+		System.out.println();
+
+	}
+
+	/**
+	 * Prints the information of a daily index to the console.
+	 *
+	 * @param index The daily index to print
+	 */
+	private static void printDailyIndex(Index index) {
+
+		System.out.println("Ticker: " + index.getTicker());
+		System.out.println("Open Price: " + index.getOpenPrice());
+		System.out.println("Close Price: " + index.getClosePrice());
+		System.out.println("Highest Price: " + index.getHighestPrice());
+		System.out.println("Lowest Price: " + index.getLowestPrice());
+		System.out.println();
+		System.out.println();
+	}
+}

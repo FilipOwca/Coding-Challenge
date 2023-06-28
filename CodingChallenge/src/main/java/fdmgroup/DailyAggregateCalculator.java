@@ -20,6 +20,16 @@ public class DailyAggregateCalculator {
 
 	private Map<LocalDate, Map<String, DailyAggregate>> dailyAggregates = new HashMap<>();
 	private Map<LocalDate, Index> dailyIndexes = new HashMap<>();
+	private String[] tickerNames;
+
+	/**
+	 * Constructs a DailyAggregateCalculator object with the provided ticker names.
+	 * 
+	 * @param tickerNames an array of ticker names
+	 */
+	public DailyAggregateCalculator(String[] tickerNames) {
+		this.tickerNames = tickerNames;
+	}
 
 	/**
 	 * Calculates the daily aggregates and indexes based on a list of trades.
@@ -46,19 +56,28 @@ public class DailyAggregateCalculator {
 //		Get the map of daily aggregates for the respective day. Create a new one if doesn't exist.
 		Map<String, DailyAggregate> aggregatesByTicker = dailyAggregates.get(date);
 		if (aggregatesByTicker == null) {
-			aggregatesByTicker = new HashMap<>();
+			aggregatesByTicker = createNewEmptyDailyAggregates();
 			dailyAggregates.put(date, aggregatesByTicker);
 		}
 
 //		Get the daily aggregate for a respective ticker. Create a new one if doesn't exist.
 		DailyAggregate aggregate = aggregatesByTicker.get(ticker);
-		if (aggregate == null) {
-			aggregate = new DailyAggregate(ticker);
-			aggregatesByTicker.put(ticker, aggregate);
-		}
 
 		updateDailyAggregatePrices(aggregate, trade);
 
+	}
+
+	/**
+	 * Creates a new map of empty DailyAggregate objects for all ticker names.
+	 * 
+	 * @return the map of empty DailyAggregate objects
+	 */
+	private Map<String, DailyAggregate> createNewEmptyDailyAggregates() {
+		Map<String, DailyAggregate> tickers = new HashMap<>();
+		for (String tickerName : tickerNames) {
+			tickers.put(tickerName, new DailyAggregate(tickerName));
+		}
+		return tickers;
 	}
 
 	/**

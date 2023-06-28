@@ -7,7 +7,7 @@ package fdmgroup;
  * @author Filip
  *
  */
-public class DailyAggregate {
+public class DailyAggregate implements DailyCollection {
 
 	private String ticker;
 	private double openPrice;

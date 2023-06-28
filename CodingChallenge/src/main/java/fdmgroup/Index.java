@@ -8,7 +8,7 @@ package fdmgroup;
  * @author Filip
  *
  */
-public class Index {
+public class Index implements DailyCollection {
 
 	private static final String ABC_NAME = "ABC";
 	private static final String MEGA_NAME = "MEGA";
@@ -109,5 +109,7 @@ public class Index {
 		return "Index [openPrice=" + openPrice + ", closePrice=" + closePrice + ", highestPrice=" + highestPrice
 				+ ", lowestPrice=" + lowestPrice + ", ticker=" + ticker + "]";
 	}
+
+
 
 }

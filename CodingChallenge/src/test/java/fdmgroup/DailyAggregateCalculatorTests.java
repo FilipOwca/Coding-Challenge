@@ -15,10 +15,12 @@ import org.junit.jupiter.api.Test;
 class DailyAggregateCalculatorTests {
 
 	DailyAggregateCalculator calculator;
+	
+	String[] tickerNames = {"ABC", "MEGA"};
 
 	@BeforeEach
 	void SetUp() {
-		calculator = new DailyAggregateCalculator();
+		calculator = new DailyAggregateCalculator(tickerNames);
 	}
 
 	@Test
@@ -27,12 +29,11 @@ class DailyAggregateCalculatorTests {
 		List<Trade> trades = new ArrayList<>();
 		trades.add(new Trade("2023-01-01 10:10:00", "ABC", 10.0, 100));
 		trades.add(new Trade("2023-01-01 10:20:00", "ABC", 15.0, 150));
-		trades.add(new Trade("2023-01-01 11:00:00", "DEF", 20.0, 200));
-		trades.add(new Trade("2023-01-01 11:10:00", "DEF", 25.0, 250));
+		trades.add(new Trade("2023-01-01 11:00:00", "MEGA", 20.0, 200));
+		trades.add(new Trade("2023-01-01 11:10:00", "MEGA", 25.0, 250));
 		trades.add(new Trade("2023-01-02 10:30:00", "ABC", 30.0, 300));
 
 //		Calculate daily aggregates
-//		DailyAggregateCalculator calculator = new DailyAggregateCalculator();
 		calculator.calculate(trades);
 		Map<LocalDate, Map<String, DailyAggregate>> dailyAggregates = calculator.getDailyAggregates();
 
@@ -48,13 +49,13 @@ class DailyAggregateCalculatorTests {
 		dailyABC1.setDailyVolume(3250.0);
 		aggregatesDay1.put(dailyABC1.getTicker(), dailyABC1);
 
-		DailyAggregate dailyDEF1 = new DailyAggregate("DEF");
-		dailyDEF1.setOpenPrice(20.0);
-		dailyDEF1.setClosePrice(25.0);
-		dailyDEF1.setHighestPrice(25.0);
-		dailyDEF1.setLowestPrice(20.0);
-		dailyDEF1.setDailyVolume(10250.0);
-		aggregatesDay1.put(dailyDEF1.getTicker(), dailyDEF1);
+		DailyAggregate dailyMEGA1 = new DailyAggregate("MEGA");
+		dailyMEGA1.setOpenPrice(20.0);
+		dailyMEGA1.setClosePrice(25.0);
+		dailyMEGA1.setHighestPrice(25.0);
+		dailyMEGA1.setLowestPrice(20.0);
+		dailyMEGA1.setDailyVolume(10250.0);
+		aggregatesDay1.put(dailyMEGA1.getTicker(), dailyMEGA1);
 
 		expectedAggregates.put(LocalDate.of(2023, 1, 1), aggregatesDay1);
 
@@ -66,6 +67,14 @@ class DailyAggregateCalculatorTests {
 		dailyABC2.setLowestPrice(30.0);
 		dailyABC2.setDailyVolume(9000.0);
 		aggregatesDay2.put(dailyABC2.getTicker(), dailyABC2);
+		
+		DailyAggregate dailyMEGA2 = new DailyAggregate("MEGA");
+		dailyMEGA2.setOpenPrice(0.0);
+		dailyMEGA2.setClosePrice(0.0);
+		dailyMEGA2.setHighestPrice(0.0);
+		dailyMEGA2.setLowestPrice(0.0);
+		dailyMEGA2.setDailyVolume(0.0);
+		aggregatesDay2.put(dailyMEGA2.getTicker(), dailyMEGA2);
 
 		expectedAggregates.put(LocalDate.of(2023, 1, 2), aggregatesDay2);
 
