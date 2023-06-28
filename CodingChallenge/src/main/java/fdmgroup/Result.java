@@ -30,30 +30,33 @@ public class Result {
 			Map<String, DailyAggregate> aggregatesByTicker = entry.getValue();
 
 			System.out.println("Date: " + date);
-			for (DailyAggregate aggregate : aggregatesByTicker.values()) {
-				printDailyAggregate(aggregate);
+			for (DailyCollection aggregate : aggregatesByTicker.values()) {
+				printDailyCollection(aggregate);
 			}
 
 //			Access and print Index values for each day.
-			Index index = dailyIndexes.get(date);
-			printDailyIndex(index);
+			DailyCollection index = dailyIndexes.get(date);
+			printDailyCollection(index);
 		}
 	}
 
 	/**
 	 * Prints the information of a daily aggregate.
 	 *
-	 * @param aggregate The daily aggregate to print
+	 * @param collection The daily collection to print
 	 */
-	private static void printDailyAggregate(DailyAggregate aggregate) {
+	private static void printDailyCollection(DailyCollection collection) {
 
-		System.out.println("Ticker: " + aggregate.getTicker());
-		if (aggregate.getOpenPrice() != 0.0) {
-			System.out.println("Open Price: " + aggregate.getOpenPrice());
-			System.out.println("Close Price: " + aggregate.getClosePrice());
-			System.out.println("Highest Price: " + aggregate.getHighestPrice());
-			System.out.println("Lowest Price: " + aggregate.getLowestPrice());
+		System.out.println("Ticker: " + collection.getTicker());
+		if (collection.getOpenPrice() != 0.0) {
+			System.out.println("Open Price: " + collection.getOpenPrice());
+			System.out.println("Close Price: " + collection.getClosePrice());
+			System.out.println("Highest Price: " + collection.getHighestPrice());
+			System.out.println("Lowest Price: " + collection.getLowestPrice());
+		   if (collection instanceof DailyAggregate) {
+		        DailyAggregate aggregate = (DailyAggregate) collection;
 			System.out.println("Daily Volume: " + aggregate.getDailyVolume());
+		   }
 		} else {
 			System.out.println("Open Price: N/A");
 			System.out.println("Close Price: N/A");
@@ -63,22 +66,6 @@ public class Result {
 		}
 
 		System.out.println();
-
 	}
-
-	/**
-	 * Prints the information of a daily index to the console.
-	 *
-	 * @param index The daily index to print
-	 */
-	private static void printDailyIndex(Index index) {
-
-		System.out.println("Ticker: " + index.getTicker());
-		System.out.println("Open Price: " + index.getOpenPrice());
-		System.out.println("Close Price: " + index.getClosePrice());
-		System.out.println("Highest Price: " + index.getHighestPrice());
-		System.out.println("Lowest Price: " + index.getLowestPrice());
-		System.out.println();
-		System.out.println();
-	}
+	
 }

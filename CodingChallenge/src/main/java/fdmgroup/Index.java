@@ -8,7 +8,7 @@ package fdmgroup;
  * @author Filip
  *
  */
-public class Index implements DailyCollection {
+public class Index extends DailyCollection {
 
 	private static final String ABC_NAME = "ABC";
 	private static final String MEGA_NAME = "MEGA";
@@ -25,20 +25,13 @@ public class Index implements DailyCollection {
 	private static double lastNGLPrice;
 	private static double lastTRXPrice;
 
-	private double openPrice;
-	private double closePrice;
-	private double highestPrice;
-	private double lowestPrice;
-
-	private String ticker;
-
 	/**
 	 * Constructs an Index object with the specified ticker.
 	 *
 	 * @param ticker The ticker symbol associated with the index
 	 */
 	public Index(String ticker) {
-		this.ticker = ticker;
+		super(ticker);
 	}
 
 	/**
@@ -68,48 +61,27 @@ public class Index implements DailyCollection {
 		if (lastABCPrice != 0 && lastMEGAPrice != 0 && lastNGLPrice != 0 && lastTRXPrice != 0) {
 			double currentPrice = ABC * lastABCPrice + MEGA * lastMEGAPrice + NGL * lastNGLPrice + TRX * lastTRXPrice;
 
-			if (this.openPrice == 0) {
-				this.openPrice = currentPrice;
+			if (super.getOpenPrice() == 0) {
+				super.setOpenPrice(currentPrice);
 			}
 
-			this.closePrice = currentPrice;
+			super.setClosePrice(currentPrice);
 
-			if (this.highestPrice == 0 || this.highestPrice < currentPrice) {
-				this.highestPrice = currentPrice;
+			if (super.getHighestPrice() == 0 || (super.getHighestPrice() < currentPrice)) {
+				super.setHighestPrice(currentPrice);
 			}
 
-			if (this.lowestPrice == 0 || this.lowestPrice > currentPrice) {
-				this.lowestPrice = currentPrice;
+			if (super.getLowestPrice() == 0 || super.getLowestPrice() > currentPrice) {
+				super.setLowestPrice(currentPrice);
 			}
 		}
 	}
 
-	public double getOpenPrice() {
-		return openPrice;
-	}
-
-	public double getClosePrice() {
-		return closePrice;
-	}
-
-	public double getHighestPrice() {
-		return highestPrice;
-	}
-
-	public double getLowestPrice() {
-		return lowestPrice;
-	}
-
-	public String getTicker() {
-		return ticker;
-	}
-
 	@Override
 	public String toString() {
-		return "Index [openPrice=" + openPrice + ", closePrice=" + closePrice + ", highestPrice=" + highestPrice
-				+ ", lowestPrice=" + lowestPrice + ", ticker=" + ticker + "]";
+		return "Index [openPrice=" + super.getOpenPrice() + ", closePrice=" + super.getClosePrice() + ", highestPrice="
+				+ super.getHighestPrice() + ", lowestPrice=" + super.getLowestPrice() + ", ticker=" + super.getTicker()
+				+ "]";
 	}
-
-
 
 }

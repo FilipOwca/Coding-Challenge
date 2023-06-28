@@ -1,0 +1,15 @@
+package fdmgroup;
+
+public interface DailyCollection {
+	
+	public String getTicker();
+	
+	public double getOpenPrice();
+
+	public double getClosePrice();
+
+	public double getHighestPrice();
+
+	public double getLowestPrice();
+
+}

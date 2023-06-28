@@ -1,0 +1,86 @@
+package fdmgroup;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * The Result class is responsible for providing input to the user
+ * 
+ * @author Filip
+ *
+ */
+public class Result {
+
+	/**
+	 * Prints the daily aggregates and indexes to the console.
+	 *
+	 * @param dailyAggregates A map of daily aggregates grouped by date and ticker
+	 *                        symbol
+	 * @param dailyIndexes    A map of daily indexes grouped by date
+	 */
+	public void printToConsole(Map<LocalDate, Map<String, DailyAggregate>> dailyAggregates,
+			Map<LocalDate, Index> dailyIndexes) {
+
+//		Iterate over the collection of aggregate maps and access market data for each day.
+		for (Map.Entry<LocalDate, Map<String, DailyAggregate>> entry : dailyAggregates.entrySet()) {
+			LocalDate date = entry.getKey();
+			Map<String, DailyAggregate> aggregatesByTicker = entry.getValue();
+
+			System.out.println("Date: " + date);
+			for (DailyCollection aggregate : aggregatesByTicker.values()) {
+				printDailyAggregate(aggregate);
+			}
+
+//			Access and print Index values for each day.
+			DailyCollection index = dailyIndexes.get(date);
+			printDailyAggregate(index);
+		}
+	}
+
+	/**
+	 * Prints the information of a daily aggregate.
+	 *
+	 * @param collection The daily aggregate to print
+	 */
+	private static void printDailyAggregate(DailyCollection collection) {
+
+		System.out.println("Ticker: " + collection.getTicker());
+		if (collection.getOpenPrice() != 0.0) {
+			System.out.println("Open Price: " + collection.getOpenPrice());
+			System.out.println("Close Price: " + collection.getClosePrice());
+			System.out.println("Highest Price: " + collection.getHighestPrice());
+			System.out.println("Lowest Price: " + collection.getLowestPrice());
+//		   if (collection instanceof DailyAggregate) {
+//		        DailyAggregate aggregate = (DailyAggregate) collection;
+//			System.out.println("Daily Volume: " + aggregate.getDailyVolume());
+		} else {
+			System.out.println("Open Price: N/A");
+			System.out.println("Close Price: N/A");
+			System.out.println("Highest Price: N/A");
+			System.out.println("Lowest Price: N/A");
+			System.out.println("Daily Volume: N/A");
+		}
+
+		System.out.println();
+	}
+	}
+	
+
+//	/**
+//	 * Prints the information of a daily index to the console.
+//	 *
+//	 * @param index The daily index to print
+//	 */
+//	private static void printDailyIndex(Index index) {
+//
+//		System.out.println("Ticker: " + index.getTicker());
+//		System.out.println("Open Price: " + index.getOpenPrice());
+//		System.out.println("Close Price: " + index.getClosePrice());
+//		System.out.println("Highest Price: " + index.getHighestPrice());
+//		System.out.println("Lowest Price: " + index.getLowestPrice());
+//		System.out.println();
+//		System.out.println();
+//	}

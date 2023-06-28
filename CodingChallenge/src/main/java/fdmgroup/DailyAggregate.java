@@ -7,13 +7,8 @@ package fdmgroup;
  * @author Filip
  *
  */
-public class DailyAggregate implements DailyCollection {
+public class DailyAggregate extends DailyCollection {
 
-	private String ticker;
-	private double openPrice;
-	private double closePrice;
-	private double highestPrice;
-	private double lowestPrice;
 	private double dailyVolume;
 
 	/**
@@ -22,47 +17,7 @@ public class DailyAggregate implements DailyCollection {
 	 * @param ticker The ticker symbol associated with the aggregated data
 	 */
 	public DailyAggregate(String ticker) {
-		this.ticker = ticker;
-	}
-
-	public String getTicker() {
-		return ticker;
-	}
-
-	public void setTicker(String ticker) {
-		this.ticker = ticker;
-	}
-
-	public double getOpenPrice() {
-		return openPrice;
-	}
-
-	public void setOpenPrice(double openPrice) {
-		this.openPrice = openPrice;
-	}
-
-	public double getClosePrice() {
-		return closePrice;
-	}
-
-	public void setClosePrice(double closePrice) {
-		this.closePrice = closePrice;
-	}
-
-	public double getHighestPrice() {
-		return highestPrice;
-	}
-
-	public void setHighestPrice(double highestPrice) {
-		this.highestPrice = highestPrice;
-	}
-
-	public double getLowestPrice() {
-		return lowestPrice;
-	}
-
-	public void setLowestPrice(double lowestPrice) {
-		this.lowestPrice = lowestPrice;
+		super(ticker);
 	}
 
 	public double getDailyVolume() {
@@ -75,9 +30,9 @@ public class DailyAggregate implements DailyCollection {
 
 	@Override
 	public String toString() {
-		return "DailyAggregate [ticker=" + ticker + ", openPrice=" + openPrice + ", closePrice=" + closePrice
-				+ ", highestPrice=" + highestPrice + ", lowestPrice=" + lowestPrice + ", dailyVolume=" + dailyVolume
-				+ "]";
+		return "DailyAggregate [ticker=" + super.getTicker() + ", openPrice=" + super.getOpenPrice() + ", closePrice="
+				+ super.getClosePrice() + ", highestPrice=" + super.getHighestPrice() + ", lowestPrice="
+				+ super.getLowestPrice() + ", dailyVolume=" + dailyVolume + "]";
 	}
 
 }
